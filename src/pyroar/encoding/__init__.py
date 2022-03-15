@@ -7,6 +7,6 @@ Created on Fri Mar 11 12:20:23 2022
 
 
 from .encoding import Encoder
-component_dic = {
+operator_dic = {
     "encoding": Encoder
 }

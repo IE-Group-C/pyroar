@@ -30,7 +30,7 @@ class Manipulator:
        self.allowed_encoding = ['OHE','FREQ','WOE']
        self.allowed_imputation = ['ConstantImputer','MostFrequentImputer','MeanImputer','MedianImputer','None']
        self.allowed_transformations = ['reciprocal','log X','squared','None']
-       self.parameters_list = ['scaling', 'encoding','impute','transformation','None']
+       self.parameters_list = ['scaling', 'encoding','impute','bin','transformation','None']
            
            
    #class methods:
@@ -53,7 +53,7 @@ class Manipulator:
        '''
        self.metadata_temp = {}
        self.columns_list = df.columns
-       self.parameters_list = ['scaling', 'encoding','impute','transformation']
+       self.parameters_list = ['scaling', 'encoding','impute','bin','transformation']
        self.param_val = ''
        self.current_col = {}
        

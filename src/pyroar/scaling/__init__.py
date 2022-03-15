@@ -6,6 +6,6 @@ Created on Fri Mar 11 12:20:23 2022
 """
 
 from .scaling import Scaler
-component_dic = {
+operator_dic = {
     "scaling": Scaler
 }

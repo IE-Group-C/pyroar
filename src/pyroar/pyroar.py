@@ -461,6 +461,7 @@ class Pyroar:
         limHigh : float
             Number of Interquartile Range statistical measure (IQR) over which outliers are identified using Interquartile Range statistical measure (IQR).
             Those outliers will be dropped later.
+        
         Returns
         -------
         outliers_normal : integer
@@ -498,19 +499,19 @@ class Pyroar:
     
     def detect_outliers_zscore(self, data):
         """
-        This function detects outliers for features with normal distribution.
-        Standard zscore is used to determine the outliers
-        if we have a normal distribution we use a standard zscore
+        
+        Detects outliers for features with normal distribution. Standard zscore method is used to determine the outliers.
+        If we have a normal distribution we use a standard zscore.
 
         Parameters
         ----------
-        data : TYPE
-            DESCRIPTION.
+        data : {array-like, sparse matrix} of shape (n_samples, n_features)
+            The data in the numerical columns.
 
         Returns
         -------
-        outliers : TYPE
-            DESCRIPTION.
+        outliers : integer
+            count of outliers identified using zscore method.
 
         """
         # threshhold for the outliers detection limit is taken to be equal to 3
@@ -530,17 +531,18 @@ class Pyroar:
     
     def detect_outliers_Mzscore(self, data):
         """
-        This function returns the non-normal distribution we use a modified zscore
+        
+        Detects outliers for features with  non-normal distribution. Modified zscore method is used to determine the outliers.
 
         Parameters
         ----------
-        data : TYPE
-            DESCRIPTION.
+        data : {array-like, sparse matrix} of shape (n_samples, n_features)
+            The data in the numerical columns.
 
         Returns
         -------
-        outliers : TYPE
-            DESCRIPTION.
+        outliers : integer
+            count of outliers identified using zscore method.
 
         """
         # threshhold for the outliers detection limit is taken to be equal to 3
@@ -560,11 +562,16 @@ class Pyroar:
     
     def plot(self):
         """
-        Correlation plots
+        
+        Makes plots of a dataframe.
+
+        Parameters
+        ----------
+        None.
 
         Returns
         -------
-        None.
+        Plots of the dataframe
 
         """
         numeric=self.df.select_dtypes(include=['float64'])
@@ -575,38 +582,28 @@ class Pyroar:
     def correlation_plot(self, triangle = True, shrink = 0.5, orientation = "vertical", my_palette = None):
         """
         
+        Obtains correlation matrix and associated correlation plot
 
         Parameters
         ----------
-        data : TYPE
-            DESCRIPTION.
-        method : TYPE, optional
-            DESCRIPTION. The default is "pearson".
-        triangle : TYPE, optional
-            DESCRIPTION. The default is True.
-        shrink : TYPE, optional
-            DESCRIPTION. The default is 0.5.
-        orientation : TYPE, optional
-            DESCRIPTION. The default is "vertical".
-        my_palette : TYPE, optional
-            DESCRIPTION. The default is None.
+        data : dataframe
+            Data set to calculate correlations from
+        -triangle : boolian, optional
+            Either True or False; default is True, Whether to plot the full heatmap of correlations or only the lower triangle.
+        shrink : float, optional
+            Governs the size of the color bar legend. See matplotlib.pyplot.colorbar() for more information.
+        orientation : string, optional
+            Either "vertical" or "horizontal"; default is "vertical".
+            Governs where the color bar legend is plotted. See matplotlib.pyplot.colorbar() for more information.
+        my_palette : colormap name or object, or list of colors, optional
+            The mapping from data values to color space. If not provided, the default will depend on center of set.
 
         Returns
         -------
-        corr_mat : TYPE
-            DESCRIPTION.
-        TYPE
-            DESCRIPTION.
+        corr_mat : tuple of (corr_mat, ax.figure)
+            corr_mat is a pandas.DataFrame() holding the correlations.
+            ax.figure is the plot-object of the heatmap.
 
-        """
-        """
-        Function to obtain correlation matrix and associated correlation plot.
-        :param data: pandas dataframe - data set to calculate correlations from.
-        :param method: Default "pearson". Type of correlation to compute. See pandas.DataFrame.corr() for more information.
-        :param triangle: Either True or False; default is True, Whether to plot the full heatmap of correlations or only the lower triangle.
-        :param shrink: Governs the size of the color bar legend. See matplotlib.pyplot.colorbar() for more information.
-        :param orientation. Either "vertical" or "horizontal"; default is "vertical". Governs where the color bar legend is plotted. See matplotlib.pyplot.colorbar() for more information.
-        :return: tuple of (corr_mat, ax.figure). corr_mat is a pandas.DataFrame() holding the correlations. ax.figure is the plot-object of the heatmap.
         """
         corr_mat = self.df.corr(method="pearson")
     
@@ -627,12 +624,14 @@ class Pyroar:
     
     def scan_missing_values(self, dropThreshold):
         """
-        This functions scans the missing values and gives recommendation either
-        to drop the column, use specific imputation.
+        
+        Scans for missing values in the dataframe and stores recommendation for the user in a dictoinary.
+        Called by the 'scan' function.
+        
         Parameters
-        ----------
-        dropThreshold : TYPE
-            DESCRIPTION.
+        ----------            
+        dropThreshold : float
+            Threshold of missing values percentage over which to recommend dropping a column from the dataframe.
 
         Returns
         -------
@@ -661,13 +660,17 @@ class Pyroar:
     def scan_catorical_classes(self, catsDropThreshold,catsLblEncodeThreshold ):
         """
         
+        Scans for catagorical columns in the dataframe and stores recommendation on how to handle them for the user in a dictoinary.
+        Called by the 'scan' function.        
 
         Parameters
         ----------
-        catsDropThreshold : TYPE
-            DESCRIPTION.
-        catsLblEncodeThreshold : TYPE
-            DESCRIPTION.
+        catsLblEncodeThreshold : integer
+            Threshold of catagorical variables catagories count over which to recommend applying label encoding.
+            Must be lower than the value in 'catsDropThreshold'.
+            Catagorical variables lowwer than the threshold will be recommended to be one-hot encoded.
+        catsDropThreashold : integer
+            Threshold of catagorical variables catagories count over which to recommend dropping a column from the dataframe.
 
         Returns
         -------
@@ -694,15 +697,21 @@ class Pyroar:
     def scan_outliers(self, outlier_scale_lim, outlier_scale_frac, outlier_drop_lim):
         """
         
+        Scans for outliers in the dataframe and stores recommendation on how to handle them for the user in a dictoinary.
+        Called by the 'scan' function.
 
         Parameters
         ----------
-        outlier_drop_lim : TYPE
-            DESCRIPTION.
-        outlier_scale_frac : TYPE
-            DESCRIPTION.
-        outlier_scale_lim : TYPE
-            DESCRIPTION.
+        outlier_scale_lim : float
+            Number of Interquartile Range statistical measure (IQR) over which outliers are identified using Interquartile Range statistical measure (IQR).
+            The identified outliers will be recommended to be treated by applying robust scaler
+            or will be ignored depending on the fraction specified in 'outlier_scale_frac'
+        outlier_scale_frac : float
+            Fraction of outliers over which to recommend applying robust scaler based on the limit specified in 'outlier_scale_lim'
+            If fraction of outliers is below this fraction, outliers will not be treated (ignored).
+        outlier_drop_lim : float
+            Number of Interquartile Range statistical measure (IQR) over which outliers are identified using Interquartile Range statistical measure (IQR).
+            Those outliers will be recommended to be dropped.
 
         Returns
         -------
@@ -742,11 +751,17 @@ class Pyroar:
     def stat_test_numerical(self, pvalue):
         """
         
+        Tests for normality using Jarque-Bera or Shapiro tests on numerical variables in the dataframe
+        and stores recommendation on how to scale them for the user in a dictionary.
+        Also checks normality by testing reciprocal (1/x), logarithmic (log x), and square exponent (x^2) functions transformations on numerical variables.
+        To perform the Jarque-Bera goodness, first of all, it is needed to check that the sample is above 2000 (n>2000) data points.
+        Otherwise it is recommended to use the Shapiro-Wilk tests to check for normal distribution of the sample.
+        Called by the 'scan' function.
 
         Parameters
         ----------
-        pvalue : TYPE
-            DESCRIPTION.
+        pvalue : float
+            Probability value for null-hypothesis significance testing used in statistical tests used in this function.
 
         Returns
         -------
@@ -836,13 +851,16 @@ class Pyroar:
     def stat_test_categorical(self, pvalue, target):
         """
         
+        Implements Chi Square test for categorical nominal variables in the dataframe
+        and stores recommendation whether to keep them or remove them for the user in a dictionary.
+        Called by the 'scan' function.
 
         Parameters
         ----------
-        pvalue : TYPE
-            DESCRIPTION.
-        target : TYPE
-            DESCRIPTION.
+        pvalue : float
+            Probability value for null-hypothesis significance testing used in statistical tests used in this function.
+        target : string, target column name in dataframe
+            Binary classification target column name in the dataframe (column must exist in the dataframe)
 
         Returns
         -------

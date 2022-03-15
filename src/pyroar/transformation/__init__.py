@@ -6,6 +6,6 @@ Created on Fri Mar 11 12:20:23 2022
 """
 
 from .transformation import Transformer
-component_dic = {
+operator_dic = {
     "transformation": Transformer
 }
