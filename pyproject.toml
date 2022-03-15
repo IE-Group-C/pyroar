@@ -1,0 +1,14 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+	"scipy",
+	"sklearn",
+	"pandas",
+	"numpy",
+	"category_encoders",
+	"statsmodels",
+	"seaborn",
+	"matplotlib.pyplot"
+]
+build-backend = "setuptools.build_meta"
